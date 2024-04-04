@@ -56,12 +56,27 @@ public:
             cerr << "Error: Unable to open file " << filename << endl;
         }
     }
+    void add_to_file(const string &filename, int Id, const string &Name)
+    {
+        ofstream file(filename, ios_base::app);
+        if (file.is_open())
+        {
+            file << "\n"<< Id << " " << Name << endl;
+            file.close();
+            add_student(Id, Name);
+        }
+        else
+        {
+            cerr << "Error: Unable to open file " << filename << " for writing." << endl;
+        }
+    }
 };
 
 int main()
 {
     club_data Khelaiya_club, Press_club, general;
     int input_id, choice;
+    string stud_name; //only needed in switch case 3
     Khelaiya_club.get_from_file("khelaiya_club_file.txt");
     Press_club.get_from_file("Press_club_file.txt");
     do
@@ -123,8 +138,30 @@ int main()
             break;
 
         case 3:
-            cout << "Enter the key you want to delete:" << endl;
+            char extra;
+            int stud_id;
+            cout << "Enter student ID:" << endl;
+            cin >> stud_id;
+            cout << "Enter student name in the format(Name_Surname):" << endl;
+            cin >> stud_name;
+            cout << "Select the club you want to add the member to: \na.Khelaiya club\nb.Press club"
+                 << endl;
+            cin >> extra;
+            switch (extra)
+            {
+            case 'a':
+                Khelaiya_club.add_to_file("khelaiya_club_file.txt", stud_id, stud_name);
+                cout << "Student details uploaded successfully."<<endl<<"\n";
+                break;
 
+            case 'b':
+                Press_club.add_to_file("Press_club_file.txt", stud_id, stud_name);
+                cout << "Student details uploaded successfully."<<endl<<"\n";
+                break;
+
+            default:
+                break;
+            }
             break;
 
         case 4:
